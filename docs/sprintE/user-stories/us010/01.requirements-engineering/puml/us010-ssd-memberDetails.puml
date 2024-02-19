@@ -1,0 +1,31 @@
+@startuml SSD1
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+autonumber
+
+title Sequence Diagram - Visitor Sort Posts by Unpopular
+
+actor "Member" as Member
+participant "routes:Member" as Routes
+participant "GetPostsCommentsByUsernameController" as GetPostsCommentsByUsernameController
+participant "GetPostsCommentsByUsername"
+participant "getUserInfo:UserRepo" as UserRepo
+participant 
+participant 
+
+activate Member
+Member -> Routes: GET /users/info/:username
+
+activate Routes
+Routes -> GetPostsCommentsByUsernameController: executeImp(req, res);
+
+activate GetPostsCommentsByUsernameController
+GetUnpopularPostController -> GetUnpopularPostController: execute(dto)
+
+activate GetUnpopularPostController
+GetUnpopularPostController -> useCase: execute(dto)
+
+
+@enduml

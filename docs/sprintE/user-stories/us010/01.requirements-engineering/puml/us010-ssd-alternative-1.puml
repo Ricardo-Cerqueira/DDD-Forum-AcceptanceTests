@@ -1,0 +1,24 @@
+@startuml SSD1
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - Alternative 1 - View a member's profile - Main page
+
+autonumber
+
+actor "Visitor" as Visitor
+participant "System" as System
+
+activate Visitor
+
+    Visitor -> System: Clicks the username of a post creator on the main page
+    activate System
+
+        System --> Visitor: Displays member's profile.
+        deactivate Visitor
+
+deactivate System
+
+@enduml

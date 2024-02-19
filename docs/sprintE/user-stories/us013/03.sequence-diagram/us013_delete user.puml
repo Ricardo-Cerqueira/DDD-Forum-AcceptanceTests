@@ -1,0 +1,92 @@
+@startuml SD1
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+autonumber
+
+title Sequence Diagram (SD) - US013 - Delete user
+
+actor "Member" as Member
+participant "postRouter:Router" as PostRouter
+participant "deleteUserController:DeleteUserController" as DeleteUserController
+participant "dto:DeleteUserPostDto" as dto
+participant "useCase:DeleteUser" as useCase
+participant "userRepo:IUserRepo" as userRepo
+participant "user:User" as user
+participant "memberRepo" as memberRepo
+participant "member:Member" as member
+participant "postRepo:UpvotePost" as postRepo
+
+activate Member
+
+Member -> PostRouter: DELETE /posts/:userId
+activate PostRouter
+
+PostRouter -> DeleteUserController: execute(req, res)
+activate DeleteUserController
+
+DeleteUserController-> DeleteUserController: executeImp(req, res)
+activate DeleteUserController #LightBlue
+
+create dto
+DeleteUserController -> dto: new()
+
+DeleteUserController -> useCase: execute(dto)
+activate useCase
+
+useCase --> dto: get userId
+activate dto
+
+dto -> useCase: give userId
+deactivate dto
+
+useCase -> userRepo:getUserByUserId(userId)
+deactivate useCase
+activate userRepo
+
+create user
+userRepo-> user:new()
+
+userRepo--> useCase: user
+deactivate userRepo
+activate useCase
+
+useCase -> memberRepo:getMemberByUserId(userId)
+deactivate userRepo
+activate memberRepo
+
+create member
+memberRepo -> member:new()
+
+memberRepo --> useCase: memberId from member
+deactivate memberRepo
+
+useCase -> postRepo:hasPostsByMemberId(memberId)
+activate postRepo
+
+postRepo --> useCase: false
+deactivate postRepo
+
+useCase -> user: delete() 
+activate user
+deactivate user
+
+useCase -> userRepo:save(user)
+activate userRepo
+
+useCase--> DeleteUserController: return right(Result.ok<void>())
+deactivate userRepo
+deactivate useCase
+
+DeleteUserController --> DeleteUserController
+deactivate DeleteUserController
+
+DeleteUserController--> PostRouter: result
+deactivate DeleteUserController
+
+PostRouter --> Member: STATUS 200 ok 
+deactivate PostRouter
+deactivate Member
+
+@enduml

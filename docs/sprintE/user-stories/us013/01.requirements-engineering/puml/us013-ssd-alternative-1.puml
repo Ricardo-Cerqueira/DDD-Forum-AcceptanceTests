@@ -1,0 +1,37 @@
+@startuml SSD1
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - Alternative 1 - Successfully delete a user account
+
+autonumber
+
+actor "Member" as Member
+participant "System" as System
+
+activate Member
+
+    Member -> System: Log in
+    activate System
+
+        System --> Member: Logs in account
+        deactivate System
+
+    Member -> System: Click username
+    activate System
+
+        System --> Member: Profile displayed: no posts or comments
+        deactivate System
+
+    Member -> System: Click 'Delete'
+    activate System
+
+        System --> Member: Account deleted and user logged out
+        deactivate System
+    
+    deactivate Member
+
+@enduml
+ 
